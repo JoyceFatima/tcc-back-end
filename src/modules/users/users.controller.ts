@@ -13,6 +13,7 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { Role } from '@/common/enums/role.enum';
 import { Roles } from '@/decorator/roles.decorator';
+import { UserDecorator } from '@/decorator/user.decorator';
 import { AuthGuard } from '@/guards/auth.guard';
 import { RolesGuard } from '@/guards/roles.guard';
 
@@ -51,6 +52,17 @@ export class UsersController {
     }
   }
 
+  @Get('find/me')
+  @UseGuards(AuthGuard)
+  async findMe(@UserDecorator('id') id: string) {
+    try {
+      const res = await this.usersService.findOne({ id });
+      return { message: 'Success', data: res, statusCode: 200 };
+    } catch (error) {
+      throw { message: error.message, statusCode: 400 };
+    }
+  }
+
   @Post()
   async create(@Body() user: IUser) {
     try {
@@ -80,6 +92,17 @@ export class UsersController {
     try {
       await this.usersService.update(id, user);
       return { message: 'Updated', statusCode: 200 };
+    } catch (error) {
+      throw { message: error.message, statusCode: 400 };
+    }
+  }
+
+  @Patch('update/me')
+  @UseGuards(AuthGuard)
+  async updateMe(@Body() user: Partial<User>, @UserDecorator('id') id: string) {
+    try {
+      const res = await this.usersService.update(id, user);
+      return { message: 'Success', data: res, statusCode: 200 };
     } catch (error) {
       throw { message: error.message, statusCode: 400 };
     }

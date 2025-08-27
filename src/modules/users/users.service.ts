@@ -72,7 +72,7 @@ export class UsersService {
     }
   }
 
-  async upsert(data: User, id?: string): Promise<void> {
+  async upsert(data: Partial<User>, id?: string): Promise<void> {
     const [user] = await this.find({ id });
 
     if (!user) {
