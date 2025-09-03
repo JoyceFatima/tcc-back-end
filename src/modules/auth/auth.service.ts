@@ -39,13 +39,14 @@ export class AuthService {
 
   async renewToken(jwt: string) {
     const isExpired = isTokenExpired(jwt);
+    const decodedUser = decodeToken(jwt);
+    const user = await this.fetchUser({ id: decodedUser.id });
 
     if (isExpired) {
-      const user = decodeToken(jwt);
       const token = generateToken(user);
       return { token, user };
     }
-    return { token: jwt, user: decodeToken(jwt) };
+    return { token: jwt, user };
   }
 
   async changePassword(jwt: string, passwords: IChangePassword) {
