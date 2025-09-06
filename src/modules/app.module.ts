@@ -5,7 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig } from '../common/database/database-config';
 
 import { AuthModule } from './auth/auth.module';
+import { BusinessModule } from './business/business.module';
+import { BusinessTypeModule } from './business-type/business-type.module';
 import { RolesModule } from './roles/roles.module';
+import { TargetAudienceModule } from './target-audience/target-audience.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -15,6 +18,9 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     AuthModule,
     RolesModule,
+    BusinessModule,
+    BusinessTypeModule,
+    TargetAudienceModule,
   ],
 })
 export class AppModule implements OnModuleInit {

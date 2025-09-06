@@ -11,16 +11,15 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
-import { Role } from '@/common/enums/role.enum';
-import { Roles } from '@/decorator/roles.decorator';
-import { UserDecorator } from '@/decorator/user.decorator';
-import { AuthGuard } from '@/guards/auth.guard';
-import { RolesGuard } from '@/guards/roles.guard';
-
+import { Role } from '../../common/enums/role.enum';
+import { Roles } from '../../decorator/roles.decorator';
+import { UserDecorator } from '../../decorator/user.decorator';
 import { User } from '../../entities/users/user.entity';
+import { AuthGuard } from '../../guards/auth.guard';
+import { RolesGuard } from '../../guards/roles.guard';
 
 import { IChangePassword } from './interfaces/change-password';
-import { IUser } from './interfaces/user.dto';
+import { IInsertUser } from './interfaces/insert-user';
 import { UsersService } from './users.service';
 
 @ApiTags('Users')
@@ -64,9 +63,9 @@ export class UsersController {
   }
 
   @Post()
-  async create(@Body() user: IUser) {
+  async create(@Body() data: IInsertUser) {
     try {
-      const res = await this.usersService.insert(user, user.role);
+      const res = await this.usersService.insert(data);
       return { message: 'Success', data: res, statusCode: 201 };
     } catch (error) {
       throw { message: error.message, statusCode: 400 };
@@ -76,9 +75,9 @@ export class UsersController {
   @Put(':id')
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.MASTER)
-  async upsert(@Body() user: User, @Param('id') id?: string) {
+  async upsert(@Body() data: IInsertUser, @Param('id') id?: string) {
     try {
-      const res = await this.usersService.upsert(user, id);
+      const res = await this.usersService.upsert(data, id);
       return { message: 'Success', data: res, statusCode: 200 };
     } catch (error) {
       throw { message: error.message, statusCode: 400 };

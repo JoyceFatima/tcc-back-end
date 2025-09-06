@@ -15,6 +15,7 @@ import { RolesService } from '../roles/roles.service';
 import { UsersRolesService } from '../users-roles/users-roles.service';
 
 import { IChangePassword } from './interfaces/change-password';
+import { IInsertUser } from './interfaces/insert-user';
 
 @Injectable()
 export class UsersService {
@@ -43,56 +44,61 @@ export class UsersService {
     }
   }
 
-  async insert(data: Partial<User>, roleName?: Role): Promise<User> {
+  async insert(data: IInsertUser): Promise<User> {
+    const { user, business } = data;
+
     try {
       const findUser = await this.usersRepository.findOne({
-        where: { email: data.email },
+        where: { email: user.email },
       });
 
       if (findUser) {
         throw new Error('User already exists');
       }
 
-      const [role] = await this.rolesService.find({ name: roleName });
+      const [role] = await this.rolesService.find({ name: Role.EMPLOYER });
       if (!role) throw new NotFoundException('Role not found');
 
-      if (!data.password) {
+      if (!user.password) {
         throw new Error('Password is required');
       }
 
-      const password = encryptPassword(data.password);
-      const user = await this.usersRepository.save({ ...data, password });
+      const password = encryptPassword(user.password);
+      const result = await this.usersRepository.save({ ...user, password });
       this.usersRolesService.insert({
-        user,
+        user: result,
         role,
       });
+      if (business) {
+        this.businessService.insert({ ...business, ownerId: result.id });
+      }
 
-      return user;
+      return result;
     } catch (error) {
       throw error;
     }
   }
 
-  async upsert(data: Partial<User>, id?: string): Promise<void> {
-    const [user] = await this.find({ id });
+  async upsert(data: IInsertUser, id?: string): Promise<void> {
+    const user = await this.findOne({ id });
 
     if (!user) {
-      await this.insert(data, data.userRoles[0].role.name);
+      await this.insert(data);
     } else {
       for (const role of user.userRoles) {
         await this.usersRolesService.delete(role.id);
       }
-      const userUpdated = await this.usersRepository.save(data);
+      const userUpdated = await this.usersRepository.save(data.user);
 
       this.usersRolesService.insert({
         user: userUpdated,
-        role: data.userRoles[0].role,
+        role: data.user.userRoles[0].role,
       });
     }
   }
 
   async update(id: string, data: Partial<User>): Promise<void> {
-    const [user] = await this.find({ id });
+    const user = await this.findOne({ id });
     if (!user) throw new NotFoundException('User not found');
 
     await this.usersRepository.update(id, data);

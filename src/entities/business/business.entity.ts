@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 
 import { BusinessType } from '../business-type/business-type.entity';
+import { TargetAudience } from '../target-audience/target-audience.entity';
 import { User } from '../users/user.entity';
 
 @Entity('business')
@@ -57,7 +58,7 @@ export class Business {
   @JoinColumn({ name: 'business_type_id' })
   businessType: BusinessType;
 
-  @ManyToOne(() => BusinessType, (businessType) => businessType.id)
+  @ManyToOne(() => TargetAudience, (targetAudience) => targetAudience.id)
   @JoinColumn({ name: 'target_audience_id' })
-  targetAudience: BusinessType;
+  targetAudience: TargetAudience;
 }

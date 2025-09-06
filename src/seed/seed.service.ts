@@ -1,15 +1,17 @@
 import { Injectable } from '@nestjs/common';
 
-import { Role } from '@/common/enums';
-import { User } from '@/entities/users/user.entity';
-import { RolesService } from '@/modules/roles/roles.service';
-import { UsersService } from '@/modules/users/users.service';
+import { Role } from '../common/enums';
+import { BusinessType } from '../entities/business-type/business-type.entity';
+import { BusinessTypeService } from '../modules/business-type/business-type.service';
+import { RolesService } from '../modules/roles/roles.service';
+import { TargetAudienceService } from '../modules/target-audience/target-audience.service';
 
 @Injectable()
 export class SeedService {
   constructor(
-    private readonly userService: UsersService,
+    private readonly targetAudiencesService: TargetAudienceService,
     private readonly rolesService: RolesService,
+    private readonly businessTypesService: BusinessTypeService,
   ) {}
 
   async roles() {
@@ -25,48 +27,54 @@ export class SeedService {
     }
   }
 
-  async users() {
-    const masters: Partial<User>[] = [
-      {
-        email: 'john@master.com',
-        password: 'Password@123',
-        name: 'John',
-        lastName: 'Doe',
-        document: '12345678901',
-        phone: '+1234567890',
-      },
+  async businessTypes() {
+    const businessTypes: Partial<BusinessType>[] = [
+      { name: 'Restaurante' },
+      { name: 'Varejo' },
+      { name: 'Serviços' },
+      { name: 'Saúde' },
+      { name: 'Beleza' },
+      { name: 'Educação' },
+      { name: 'Outro' },
     ];
 
-    const employers: Partial<User>[] = [
-      {
-        email: 'dave@employer.com',
-        password: 'Password@123',
-        name: 'Dave',
-        lastName: 'Smith',
-        document: '10987654321',
-        phone: '+0987654321',
-      },
-    ];
-
-    for (const user of [...masters, ...employers]) {
-      const existingUser = await this.userService.findOne({
-        email: user.email,
+    for (const type of businessTypes) {
+      const existingType = await this.businessTypesService.find({
+        name: type.name,
       });
-      if (existingUser) {
+      if (existingType.length > 0) {
         continue;
       }
 
-      await this.userService.insert(
-        {
-          ...user,
-        },
-        masters.includes(user) ? Role.MASTER : Role.EMPLOYER,
-      );
+      await this.businessTypesService.insert(type);
+    }
+  }
+
+  async targetAudiences() {
+    const targetAudiences: Partial<BusinessType>[] = [
+      { name: 'Jovens Adultos (18-30)' },
+      { name: 'Adultos (30-50)' },
+      { name: 'Idosos (50+)' },
+      { name: 'Famílias' },
+      { name: 'Profissionais' },
+      { name: 'Estudantes' },
+    ];
+
+    for (const audience of targetAudiences) {
+      const existingAudience = await this.businessTypesService.find({
+        name: audience.name,
+      });
+      if (existingAudience.length > 0) {
+        continue;
+      }
+
+      await this.targetAudiencesService.insert(audience);
     }
   }
 
   async run() {
     await this.roles();
-    await this.users();
+    await this.businessTypes();
+    await this.targetAudiences();
   }
 }
