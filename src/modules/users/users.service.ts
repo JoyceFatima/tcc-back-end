@@ -7,10 +7,10 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { Role } from '@/common/enums/role.enum';
-import { decryptPassword, encryptPassword } from '@/utils/funcs';
-
+import { Role } from '../../common/enums/role.enum';
 import { User } from '../../entities/users/user.entity';
+import { decryptPassword, encryptPassword } from '../../utils/funcs';
+import { BusinessService } from '../business/business.service';
 import { RolesService } from '../roles/roles.service';
 import { UsersRolesService } from '../users-roles/users-roles.service';
 
@@ -23,6 +23,7 @@ export class UsersService {
     private usersRepository: Repository<User>,
     private rolesService: RolesService,
     private usersRolesService: UsersRolesService,
+    private businessService: BusinessService,
   ) {}
 
   async find(where?: Partial<User>): Promise<User[]> {

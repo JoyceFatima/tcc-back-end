@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { User } from '../../entities/users/user.entity';
+import { BusinessModule } from '../business/business.module';
 import { RolesModule } from '../roles/roles.module';
 import { UsersRolesModule } from '../users-roles/users-roles.module';
 
@@ -12,6 +13,11 @@ import { UsersService } from './users.service';
   controllers: [UsersController],
   providers: [UsersService],
   exports: [UsersService],
-  imports: [TypeOrmModule.forFeature([User]), RolesModule, UsersRolesModule],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    RolesModule,
+    UsersRolesModule,
+    BusinessModule,
+  ],
 })
 export class UsersModule {}
