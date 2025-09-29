@@ -1,3 +1,21 @@
+/*
+ * Este serviço gerencia toda a lógica de negócio relacionada à autenticação de usuários.
+ *
+ * Ele é responsável por:
+ *
+ * 1.  **Login**: Valida as credenciais (e-mail/nome de usuário e senha) de um usuário,
+ * compara a senha e gera um token JWT se o login for bem-sucedido.
+ * 2.  **Renovação de Token**: Permite que um usuário com um token existente (mesmo que expirado)
+ * receba um novo token, estendendo sua sessão de forma segura.
+ * 3.  **Alteração de Senha**: Verifica a senha atual do usuário e a substitui por
+ * uma nova senha, criptografando-a.
+ *
+ * As funções auxiliares privadas garantem que as validações e as operações de
+ * busca e comparação de senha sejam reutilizáveis e organizadas.
+ *
+ * O serviço depende do `UsersService` para interagir com o banco de dados.
+ */
+
 import {
   BadRequestException,
   Injectable,

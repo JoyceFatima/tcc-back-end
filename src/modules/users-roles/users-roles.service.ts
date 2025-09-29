@@ -1,3 +1,20 @@
+/*
+ * Este serviço gerencia todas as operações de banco de dados para a entidade `UserRole`.
+ *
+ * Ele é responsável por manipular a tabela de junção que associa usuários a papéis
+ * (roles). A tabela `UserRole` é essencial para implementar o controle de acesso
+ * baseado em papéis (RBAC).
+ *
+ * Principais responsabilidades:
+ *
+ * - **`find`**: Busca todas as associações entre usuários e papéis que correspondem
+ * a um critério de filtro opcional. Ele pode incluir os dados completos de `user` e `role`
+ * se a opção `relations` for fornecida.
+ * - **`insert`**: Salva uma nova associação, ligando um usuário a um papel.
+ * - **`delete`**: Remove uma associação `UserRole` pelo seu ID. Antes de deletar,
+ * ele verifica se a associação existe, lançando uma exceção se não for encontrada.
+ */
+
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';

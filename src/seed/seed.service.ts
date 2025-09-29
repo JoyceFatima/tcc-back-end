@@ -1,3 +1,22 @@
+/*
+ * Este serviço é o núcleo do script de semente (seed) da aplicação.
+ *
+ * Ele é responsável por popular o banco de dados com dados essenciais para o
+ * funcionamento inicial do sistema.
+ *
+ * Como funciona:
+ *
+ * - Ele usa serviços de outros módulos (`RolesService`, `BusinessTypeService`, etc.)
+ * para interagir com o banco de dados.
+ * - Cada método (`roles`, `businessTypes`, `targetAudiences`) verifica se os
+ * dados já existem antes de inseri-los, evitando duplicatas em execuções
+ * subsequentes do script.
+ * - O método `run` orquestra a execução de todos os métodos de semente na
+ * ordem correta.
+ *
+ * Este serviço é injetado e executado pelo script `seed-script.ts`.
+ */
+
 import { Injectable } from '@nestjs/common';
 
 import { Role } from '../common/enums';

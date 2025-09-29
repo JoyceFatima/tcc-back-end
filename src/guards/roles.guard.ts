@@ -1,3 +1,22 @@
+/*
+ * Este é um "Guard" (Guarda) do NestJS para autorização baseada em papéis (roles).
+ *
+ * Ele é usado para proteger rotas, garantindo que apenas usuários com as
+ * permissões corretas possam acessá-las.
+ *
+ * Como funciona:
+ *
+ * 1.  **Lê os papéis necessários**: Usa o `Reflector` para obter os papéis (@Roles)
+ * definidos na rota ou no método do controlador.
+ * 2.  **Verifica o usuário**: Obtém o objeto do usuário da requisição (assumindo que
+ * o usuário já foi autenticado).
+ * 3.  **Compara os papéis**: Verifica se o usuário possui algum dos papéis
+ * necessários para a rota.
+ * 4.  **Decide o acesso**:
+ * - Se o usuário tiver um dos papéis, permite o acesso.
+ * - Caso contrário, lança uma `ForbiddenException` (erro 403), negando o acesso.
+ */
+
 import {
   CanActivate,
   ExecutionContext,

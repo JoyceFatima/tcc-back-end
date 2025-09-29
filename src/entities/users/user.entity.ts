@@ -1,3 +1,27 @@
+/*
+ * Este arquivo define a entidade `User`, que mapeia a tabela de usuários
+ * no banco de dados usando o TypeORM.
+ *
+ * Uma entidade representa uma tabela, e suas propriedades (@Column)
+ * representam as colunas da tabela.
+ *
+ * Principais características:
+ *
+ * - **`@Entity('users')`**: Associa esta classe à tabela `users`.
+ * - **`@ApiProperty(...)`**: Adiciona metadados para a documentação da API (Swagger),
+ * descrevendo cada propriedade.
+ * - **`@Exclude({ toClassOnly: false })`**: Usado com o `ClassSerializerInterceptor`
+ * para garantir que a propriedade `password` seja excluída das respostas da API,
+ * protegendo dados sensíveis.
+ * - **`@Column({ unique: true })`**: Garante que os valores de colunas como
+ * `email`, `phone` e `document` sejam únicos no banco de dados.
+ * - **`@CreateDateColumn`**, **`@UpdateDateColumn`**, **`@DeleteDateColumn`**:
+ * Gerenciam automaticamente as datas de criação, atualização e exclusão (soft delete).
+ * - **`@OneToMany(...)`**: Estabelece um relacionamento "um para muitos" com a
+ * entidade `UserRole`. As opções `eager: true` e `cascade: true` garantem que os
+ * papéis do usuário sejam carregados e persistidos automaticamente.
+ */
+
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import {

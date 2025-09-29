@@ -1,3 +1,18 @@
+/*
+ * Este serviço é responsável por enviar e-mails de notificação.
+ *
+ * Ele utiliza a API de e-mail marketing Brevo (antigo Sendinblue) para
+ * enviar atualizações sobre o status de um pedido.
+ *
+ * Como funciona:
+ *
+ * - O método `sendEmail` recebe os detalhes do e-mail (e-mail do destinatário, nome do cliente, etc.).
+ * - Ele constrói o conteúdo do e-mail, incluindo versões em texto simples e HTML.
+ * - Em seguida, faz uma requisição HTTP `POST` para o endpoint da API da Brevo,
+ * enviando os dados do e-mail e a chave de API para autenticação.
+ * - Caso a requisição falhe, ele lança uma exceção para que o erro possa ser tratado.
+ */
+
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 

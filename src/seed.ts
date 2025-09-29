@@ -1,3 +1,16 @@
+/*
+ * Este é um script de semente (seed) para a aplicação NestJS.
+ *
+ * Sua única finalidade é popular o banco de dados com dados iniciais ou de teste.
+ * Ele cria um contexto de aplicação NestJS (sem iniciar o servidor web)
+ * para acessar e executar a lógica do `SeedService`.
+ *
+ * A execução deste script permite:
+ * - Inserir dados essenciais para o funcionamento da aplicação.
+ * - Preparar o ambiente de desenvolvimento com dados de exemplo.
+ * - Automatizar a criação de dados para testes.
+ */
+
 import { NestFactory } from '@nestjs/core';
 
 import { SeedModule } from './seed/seed.module';

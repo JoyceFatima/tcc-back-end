@@ -1,3 +1,27 @@
+/*
+ * Este serviço gerencia todas as operações de banco de dados e lógica de negócio para a entidade `User`.
+ *
+ * Ele é responsável por interagir com a tabela de usuários e as tabelas relacionadas (como papéis e negócios).
+ *
+ * Principais responsabilidades:
+ *
+ * - **`find` e `findOne`**: Métodos para buscar um ou mais usuários no banco de dados.
+ * - **`insert`**: Cria um novo usuário. Antes de salvar, ele valida se o usuário já existe,
+ * criptografa a senha e atribui o papel padrão (`EMPLOYER`). Se houver dados de negócio,
+ * ele também os cria.
+ * - **`upsert`**: Atualiza um usuário existente ou o cria se ele não existir.
+ * Se o usuário for atualizado, ele gerencia a remoção e recriação dos papéis para garantir a consistência.
+ * - **`update`**: Atualiza as informações de um usuário existente.
+ * - **`changePassword`**: Permite que um usuário altere sua senha, verificando a senha antiga
+ * antes de criptografar e salvar a nova.
+ * - **`delete`**: Remove um usuário, incluindo a remoção dos seus papéis associados para evitar
+ * dados órfãos.
+ *
+ * Este serviço demonstra uma camada de serviço robusta, onde a lógica de negócio
+ * é separada da lógica do controlador e do repositório, garantindo um código mais limpo e
+ * reutilizável.
+ */
+
 import {
   BadRequestException,
   Injectable,

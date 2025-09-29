@@ -1,3 +1,24 @@
+/*
+ * Este arquivo define a entidade `Business` (negócio), que mapeia a tabela
+ * correspondente no banco de dados usando o TypeORM.
+ *
+ * Uma entidade representa uma tabela, e suas propriedades (`@Column`)
+ * representam as colunas da tabela.
+ *
+ * Principais características:
+ *
+ * - **`@Entity('business')`**: Associa esta classe à tabela chamada 'business'.
+ * - **`@PrimaryGeneratedColumn('uuid')`**: Define `id` como chave primária,
+ * gerada automaticamente como um UUID.
+ * - **`@Column(...)`**: Define as colunas padrão, como `name`, `description` e `address`.
+ * - **`@CreateDateColumn`**, **`@UpdateDateColumn`**, **`@DeleteDateColumn`**:
+ * Gerenciam automaticamente as datas de criação, atualização e exclusão (soft delete).
+ * - **`@ManyToOne(...)` e `@JoinColumn(...)`**: Estabelecem relacionamentos de
+ * "muitos para um" com as entidades `User`, `BusinessType` e `TargetAudience`.
+ * Isso cria chaves estrangeiras (`ownerId`, `businessTypeId`, `targetAudienceId`)
+ * que ligam a tabela `business` a outras tabelas.
+ */
+
 import {
   Column,
   CreateDateColumn,

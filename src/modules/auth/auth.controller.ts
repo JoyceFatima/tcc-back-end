@@ -1,3 +1,19 @@
+/*
+ * Este é o controlador de autenticação da aplicação.
+ *
+ * Ele gerencia as rotas (endpoints) relacionadas à autenticação de usuários,
+ * como login e renovação de token.
+ *
+ * Principais características:
+ *
+ * - **`@ApiTags('Auth')`**: Usado para agrupar as rotas na documentação do Swagger.
+ * - **`@Controller('auth')`**: Define o prefixo da rota para todos os endpoints deste controlador.
+ * - **`login`**: Recebe credenciais de login e, se válidas, retorna um token JWT.
+ * - **`renew-token`**: Permite que um usuário com um token JWT válido gere um novo token,
+ * estendendo a sessão. O `@UseGuards(new AuthGuard())` garante que apenas
+ * requisições autenticadas possam acessar este endpoint.
+ */
+
 import { Body, Controller, Headers, Post, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 

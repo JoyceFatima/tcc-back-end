@@ -1,3 +1,23 @@
+/*
+ * Este arquivo contém funções utilitárias para tarefas de segurança,
+ * como criptografia de senhas e manipulação de tokens JWT (JSON Web Token).
+ *
+ * As funções aqui servem para:
+ *
+ * 1.  **Criptografia de Senhas**:
+ * - `encryptPassword`: Criptografa uma senha usando `bcrypt` antes de salvá-la no banco de dados.
+ * - `decryptPassword`: Compara uma senha em texto plano com sua versão criptografada para autenticação.
+ *
+ * 2.  **Geração e Verificação de Tokens JWT**:
+ * - `generateToken`: Cria um novo token de autenticação para um usuário.
+ * - `decodeToken`: Decodifica um token sem verificar sua validade (útil para inspecionar o conteúdo).
+ * - `verifyToken`: Verifica a autenticidade e a validade de um token (lança um erro se for inválido).
+ *
+ * 3.  **Manipulação de Tokens**:
+ * - `getToken`: Extrai o token de autenticação de um cabeçalho HTTP `Authorization`.
+ * - `isTokenExpired`: Verifica se um token já expirou, baseando-se na data de validade.
+ */
+
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 

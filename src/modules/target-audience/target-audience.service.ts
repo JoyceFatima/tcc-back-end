@@ -1,3 +1,21 @@
+/*
+ * Este serviço gerencia todas as operações de banco de dados para a entidade `TargetAudience`.
+ *
+ * Ele abstrai a lógica de acesso ao banco de dados, oferecendo métodos simples
+ * e reutilizáveis para interagir com a tabela de público-alvo.
+ *
+ * Principais responsabilidades:
+ *
+ * - **`find`**: Busca todos os públicos-alvo que correspondem a um critério de filtro opcional.
+ * - **`findOne`**: Busca um único público-alvo por um critério específico.
+ * - **`insert`**: Salva um novo público-alvo no banco de dados.
+ * - **`update`**: Atualiza as informações de um público-alvo existente.
+ * - **`delete`**: Remove um público-alvo do banco de dados (geralmente uma exclusão lógica, ou "soft delete").
+ *
+ * Cada método inclui tratamento de erros para garantir que a aplicação responda
+ * de forma adequada em caso de falhas no banco de dados, lançando exceções NestJS.
+ */
+
 import {
   Injectable,
   InternalServerErrorException,

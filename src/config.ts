@@ -1,3 +1,18 @@
+/*
+ * Este arquivo centraliza todas as configurações da aplicação.
+ *
+ * Ele lê as variáveis de ambiente de um arquivo `.env` e as organiza
+ * em um objeto de configuração estruturado.
+ *
+ * A principal função deste arquivo é:
+ * - Separar as configurações sensíveis (como credenciais de banco de dados e chaves de API)
+ * do código-fonte.
+ * - Fornecer um acesso fácil e tipado a essas configurações em toda a aplicação.
+ *
+ * As variáveis de ambiente são carregadas no início para garantir que estejam disponíveis
+ * para todos os módulos.
+ */
+
 import * as dotenv from 'dotenv';
 
 dotenv.config();
