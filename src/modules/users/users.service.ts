@@ -69,7 +69,7 @@ export class UsersService {
   }
 
   async insert(data: IInsertUser): Promise<User> {
-    const { user, business } = data;
+    const { user, business, role: roleCreateUser } = data;
 
     try {
       const findUser = await this.usersRepository.findOne({
@@ -80,7 +80,9 @@ export class UsersService {
         throw new Error('User already exists');
       }
 
-      const [role] = await this.rolesService.find({ name: Role.EMPLOYER });
+      const [role] = await this.rolesService.find({
+        name: roleCreateUser ?? Role.EMPLOYER,
+      });
       if (!role) throw new NotFoundException('Role not found');
 
       if (!user.password) {

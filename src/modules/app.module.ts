@@ -30,6 +30,7 @@ import { BusinessModule } from './business/business.module';
 import { RolesModule } from './roles/roles.module';
 import { TargetAudienceModule } from './target-audience/target-audience.module';
 import { UsersModule } from './users/users.module';
+import { GoalsModule } from './goals/goals.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { UsersModule } from './users/users.module';
     BusinessModule,
     BusinessTypeModule,
     TargetAudienceModule,
+    GoalsModule,
   ],
 })
 export class AppModule implements OnModuleInit {

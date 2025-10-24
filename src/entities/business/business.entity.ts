@@ -27,11 +27,13 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { BusinessType } from '../business-type/business-type.entity';
+import { Goal } from '../goals/goal.entity';
 import { TargetAudience } from '../target-audience/target-audience.entity';
 import { User } from '../users/user.entity';
 
@@ -71,7 +73,10 @@ export class Business {
   @Column({ name: 'target_audience_id', type: 'uuid' })
   targetAudienceId: string;
 
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.id, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'owner_id' })
   owner: User;
 
@@ -82,4 +87,7 @@ export class Business {
   @ManyToOne(() => TargetAudience, (targetAudience) => targetAudience.id)
   @JoinColumn({ name: 'target_audience_id' })
   targetAudience: TargetAudience;
+
+  @OneToMany(() => Goal, (goal) => goal.business)
+  goals: Goal[];
 }

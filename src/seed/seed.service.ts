@@ -21,9 +21,12 @@ import { Injectable } from '@nestjs/common';
 
 import { Role } from '../common/enums';
 import { BusinessType } from '../entities/business-type/business-type.entity';
+import { TargetAudience } from '../entities/target-audience/target-audience.entity';
+import { BusinessService } from '../modules/business/business.service';
 import { BusinessTypeService } from '../modules/business-type/business-type.service';
 import { RolesService } from '../modules/roles/roles.service';
 import { TargetAudienceService } from '../modules/target-audience/target-audience.service';
+import { UsersService } from '../modules/users/users.service';
 
 @Injectable()
 export class SeedService {
@@ -31,18 +34,25 @@ export class SeedService {
     private readonly targetAudiencesService: TargetAudienceService,
     private readonly rolesService: RolesService,
     private readonly businessTypesService: BusinessTypeService,
+    private readonly usersService: UsersService,
+    private readonly businessService: BusinessService,
   ) {}
 
   async roles() {
-    const roles: Role[] = [Role.MASTER, Role.EMPLOYER];
+    const roles = [
+      { role: Role.MASTER, description: 'Acesso total ao sistema' },
+      { role: Role.EMPLOYER, description: 'Acesso de dono de negócio' },
+    ];
 
-    for (const role of roles) {
-      const existingRole = await this.rolesService.find();
-      if (existingRole.some((r) => r.name === role)) {
+    for (const roleData of roles) {
+      const existingRole = await this.rolesService.find({
+        name: roleData.role,
+      });
+      if (existingRole.length > 0) {
         continue;
       }
 
-      await this.rolesService.insert({ role });
+      await this.rolesService.insert(roleData);
     }
   }
 
@@ -70,7 +80,7 @@ export class SeedService {
   }
 
   async targetAudiences() {
-    const targetAudiences: Partial<BusinessType>[] = [
+    const targetAudiences: Partial<TargetAudience>[] = [
       { name: 'Jovens Adultos (18-30)' },
       { name: 'Adultos (30-50)' },
       { name: 'Idosos (50+)' },
@@ -80,14 +90,93 @@ export class SeedService {
     ];
 
     for (const audience of targetAudiences) {
-      const existingAudience = await this.businessTypesService.find({
+      const existingAudience = await this.targetAudiencesService.find({
         name: audience.name,
       });
       if (existingAudience.length > 0) {
         continue;
       }
 
-      await this.targetAudiencesService.insert(audience);
+      await this.targetAudiencesService.insert({ name: audience.name });
+    }
+  }
+
+  async users() {
+    const usersToSeed = [
+      {
+        email: 'master@email.com',
+        password: 'password123',
+        roleName: Role.MASTER,
+        phone: '99999999999',
+        document: '11111111111',
+      },
+      {
+        email: 'employer@email.com',
+        password: 'password123',
+        roleName: Role.EMPLOYER,
+        phone: '88888888888',
+        document: '22222222222',
+      },
+    ];
+
+    const [businessType] = await this.businessTypesService.find({});
+    if (!businessType) {
+      console.error(
+        'Nenhum BusinessType encontrado. Rode a seed de businessTypes primeiro.',
+      );
+      return;
+    }
+
+    const [targetAudience] = await this.targetAudiencesService.find({});
+    if (!targetAudience) {
+      console.error(
+        'Nenhum TargetAudience encontrado. Rode a seed de targetAudiences primeiro.',
+      );
+      return;
+    }
+
+    for (const userData of usersToSeed) {
+      const existingUser = await this.usersService.findOne({
+        email: userData.email,
+      });
+      if (existingUser) {
+        console.log(`Usuário ${userData.email} já existe. Pulando.`);
+        continue;
+      }
+
+      const [role] = await this.rolesService.find({ name: userData.roleName });
+      if (!role) {
+        console.error(
+          `Role ${userData.roleName} não encontrada. Pulando usuário.`,
+        );
+        continue;
+      }
+
+      // 1. Cria o usuário primeiro, sem o businessId
+      const user = await this.usersService.insert({
+        user: {
+          email: userData.email,
+          password: userData.password,
+          name:
+            userData.roleName.charAt(0).toUpperCase() +
+            userData.roleName.slice(1).toLowerCase(),
+          lastName: 'User',
+          phone: userData.phone,
+          document: userData.document,
+        },
+        role: userData.roleName,
+      });
+
+      // 2. Cria o negócio, usando o ID do usuário como proprietário
+      await this.businessService.insert({
+        name: `Negócio de ${user.name}`,
+        description: 'Negócio de teste criado via seed.',
+        address: 'Rua dos Testes, 123',
+        budget: 10000,
+        ownerId: user.id,
+        businessTypeId: businessType.id,
+        targetAudienceId: targetAudience.id,
+      });
     }
   }
 
@@ -95,5 +184,6 @@ export class SeedService {
     await this.roles();
     await this.businessTypes();
     await this.targetAudiences();
+    await this.users();
   }
 }

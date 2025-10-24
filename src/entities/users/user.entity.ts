@@ -71,7 +71,7 @@ export class User {
     example: 'John',
     required: true,
   })
-  @Column({ unique: true })
+  @Column()
   name: string;
 
   @ApiProperty({
@@ -79,7 +79,7 @@ export class User {
     example: 'Doe',
     required: true,
   })
-  @Column({ unique: true })
+  @Column()
   lastName: string;
 
   @ApiProperty({
