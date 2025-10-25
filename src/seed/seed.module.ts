@@ -29,12 +29,16 @@ import { BusinessTypeModule } from '../modules/business-type/business-type.modul
 import { RolesModule } from '../modules/roles/roles.module';
 import { TargetAudienceModule } from '../modules/target-audience/target-audience.module';
 import { UsersModule } from '../modules/users/users.module';
+import { DashboardModule } from '../modules/dashboard/dashboard.module';
+import { Dashboard } from '../entities/dashboard/dashboard.entity';
+import { Business } from '../entities/business/business.entity';
 
 import { SeedService } from './seed.service';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(seedDatabaseConfig),
+    TypeOrmModule.forFeature([Dashboard, Business]),
     EventEmitterModule.forRoot(),
     UsersModule,
     AuthModule,
@@ -42,6 +46,7 @@ import { SeedService } from './seed.service';
     BusinessTypeModule,
     TargetAudienceModule,
     BusinessModule,
+    DashboardModule,
   ],
   providers: [SeedService],
 })

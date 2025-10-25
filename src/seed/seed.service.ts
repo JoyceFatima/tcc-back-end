@@ -18,9 +18,13 @@
  */
 
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 import { Role } from '../common/enums';
+import { Business } from '../entities/business/business.entity';
 import { BusinessType } from '../entities/business-type/business-type.entity';
+import { Dashboard } from '../entities/dashboard/dashboard.entity';
 import { TargetAudience } from '../entities/target-audience/target-audience.entity';
 import { BusinessService } from '../modules/business/business.service';
 import { BusinessTypeService } from '../modules/business-type/business-type.service';
@@ -31,6 +35,10 @@ import { UsersService } from '../modules/users/users.service';
 @Injectable()
 export class SeedService {
   constructor(
+    @InjectRepository(Dashboard)
+    private readonly dashboardRepository: Repository<Dashboard>,
+    @InjectRepository(Business)
+    private readonly businessRepository: Repository<Business>,
     private readonly targetAudiencesService: TargetAudienceService,
     private readonly rolesService: RolesService,
     private readonly businessTypesService: BusinessTypeService,

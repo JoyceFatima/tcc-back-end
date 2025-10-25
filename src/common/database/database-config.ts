@@ -30,7 +30,7 @@ export const databaseConfig: DataSourceOptions = {
   password: database.pass,
   database: database.name,
   entities: ['dist/entities/**/**/*.entity{.ts,.js}'],
-  migrations: ['dist/common/database/migrations/*.{ts,js}'],
+  migrations: ['dist/migrations/*.{ts,js}'],
 };
 
 export const seedDatabaseConfig: DataSourceOptions = {
