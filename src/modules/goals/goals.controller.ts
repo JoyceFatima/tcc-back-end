@@ -1,14 +1,14 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
   UseGuards,
-  Req,
-} from '@nestjs/common'; // Supondo que você tenha um AuthGuard
+} from '@nestjs/common';
 
 import { AuthGuard } from '../../guards/auth.guard';
 
@@ -17,28 +17,32 @@ import { UpdateGoalDto } from './dto/update-goal.dto';
 import { GoalsService } from './goals.service';
 
 @UseGuards(AuthGuard)
-@Controller('goals')
+@Controller('business/:businessId/goals')
 export class GoalsController {
   constructor(private readonly goalsService: GoalsService) {}
 
   // Cria uma nova meta para o negócio do usuário logado
   @Post()
-  create(@Body() createGoalDto: CreateGoalDto, @Req() req) {
-    const businessId = req.user.businessId; // Supondo que o ID do negócio está no token
+  create(
+    @Param('businessId') businessId: string,
+    @Body() createGoalDto: CreateGoalDto,
+  ) {
     return this.goalsService.create(createGoalDto, businessId);
   }
 
   // Busca todas as metas do negócio do usuário logado
   @Get()
-  findAll(@Req() req) {
-    const businessId = req.user.businessId;
-    return this.goalsService.findAllByBusiness(businessId);
+  findAll(
+    @Param('businessId') businessId: string,
+    @Query('completed') completed: string,
+  ) {
+    const isCompleted = completed === 'true';
+    return this.goalsService.findAllByBusiness(businessId, isCompleted);
   }
 
   // Busca uma meta específica
   @Get(':id')
-  findOne(@Param('id') id: string, @Req() req) {
-    const businessId = req.user.businessId;
+  findOne(@Param('id') id: string, @Param('businessId') businessId: string) {
     return this.goalsService.findOne(id, businessId);
   }
 
@@ -47,16 +51,19 @@ export class GoalsController {
   update(
     @Param('id') id: string,
     @Body() updateGoalDto: UpdateGoalDto,
-    @Req() req,
+    @Param('businessId') businessId: string,
   ) {
-    const businessId = req.user.businessId;
     return this.goalsService.update(id, updateGoalDto, businessId);
   }
 
   // Remove uma meta
   @Delete(':id')
-  remove(@Param('id') id: string, @Req() req) {
-    const businessId = req.user.businessId;
+  remove(@Param('id') id: string, @Param('businessId') businessId: string) {
     return this.goalsService.remove(id, businessId);
+  }
+
+  @Patch(':id/complete')
+  complete(@Param('id') id: string, @Param('businessId') businessId: string) {
+    return this.goalsService.complete(id, businessId);
   }
 }

@@ -30,7 +30,7 @@ export const config = {
   },
   secutiy: {
     jwtSecret: process.env.JWT_SECRET,
-    jwtExpire: process.env.JWT_EXPIres_IN,
+    jwtExpire: process.env.JWT_EXPIRES_IN,
     bcryptSalt: process.env.BCRYPT_SALT,
   },
   email: {

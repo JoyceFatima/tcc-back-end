@@ -33,6 +33,7 @@ import { UsersModule } from './users/users.module';
 import { GoalsModule } from './goals/goals.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { GeminiModule } from './gemini/gemini.module';
+import { BusinessMetricsModule } from './business-metrics/business-metrics.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { GeminiModule } from './gemini/gemini.module';
     GoalsModule,
     DashboardModule,
     GeminiModule,
+    BusinessMetricsModule,
   ],
 })
 export class AppModule implements OnModuleInit {
