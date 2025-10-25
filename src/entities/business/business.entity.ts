@@ -32,6 +32,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { BusinessMetric } from '../business-metric/business-metric.entity';
 import { BusinessType } from '../business-type/business-type.entity';
 import { Goal } from '../goals/goal.entity';
 import { TargetAudience } from '../target-audience/target-audience.entity';
@@ -90,4 +91,7 @@ export class Business {
 
   @OneToMany(() => Goal, (goal) => goal.business)
   goals: Goal[];
+
+  @OneToMany(() => BusinessMetric, (metric) => metric.business)
+  metrics: BusinessMetric[];
 }

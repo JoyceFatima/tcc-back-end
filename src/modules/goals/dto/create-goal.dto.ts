@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateGoalDto {
   @IsString()
@@ -8,4 +8,8 @@ export class CreateGoalDto {
   @IsNumber()
   @IsNotEmpty()
   target: number;
+
+  @IsUUID()
+  @IsOptional()
+  metricId?: string;
 }
