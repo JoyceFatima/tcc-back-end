@@ -30,11 +30,14 @@ export const config = {
   },
   secutiy: {
     jwtSecret: process.env.JWT_SECRET,
-    jwtExpire: process.env.JWT_EXPIRES_IN,
+    jwtExpire: process.env.JWT_EXPIres_IN,
     bcryptSalt: process.env.BCRYPT_SALT,
   },
   email: {
     brevoApiKey: process.env.BREVO_API_KEY,
     brevoSenderEmail: process.env.BREVO_FROM_EMAIL,
+  },
+  gemini: {
+    apiKey: process.env.GEMINI_API_KEY,
   },
 };
