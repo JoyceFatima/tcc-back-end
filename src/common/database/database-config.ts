@@ -23,7 +23,7 @@ import { config } from '@/config';
 const { database } = config;
 
 export const databaseConfig: DataSourceOptions = {
-  type: 'mysql',
+  type: 'postgres',
   host: database.host,
   port: database.port,
   username: database.user,
@@ -34,7 +34,7 @@ export const databaseConfig: DataSourceOptions = {
 };
 
 export const seedDatabaseConfig: DataSourceOptions = {
-  type: 'mysql',
+  type: 'postgres',
   host: database.host,
   port: database.port,
   username: database.user,

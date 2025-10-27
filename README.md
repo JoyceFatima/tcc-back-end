@@ -150,7 +150,7 @@ Um editor de código-fonte moderno e altamente personalizável.
 
 ### d) Gerenciador de Banco de Dados: DBeaver
 
-DBeaver é um cliente de banco de dados universal que suporta diversos sistemas de banco de dados, incluindo o MySQL.
+DBeaver é um cliente de banco de dados universal que suporta diversos sistemas de banco de dados, incluindo o PostgreSQL.
 
 #### **Windows, macOS e Linux**
 
@@ -160,9 +160,9 @@ DBeaver é um cliente de banco de dados universal que suporta diversos sistemas 
 
 ---
 
-### e) Docker (Opcional - para rodar o MySQL em um contêiner)
+### e) Docker (Opcional - para rodar o PostgreSQL em um contêiner)
 
-Docker é uma plataforma que permite criar, testar e implantar aplicações rapidamente em ambientes isolados chamados contêineres. Utilizá-lo para rodar o MySQL simplifica a instalação e evita conflitos com outras aplicações no seu sistema.
+Docker é uma plataforma que permite criar, testar e implantar aplicações rapidamente em ambientes isolados chamados contêineres. Utilizá-lo para rodar o PostgreSQL simplifica a instalação e evita conflitos com outras aplicações no seu sistema.
 
 #### i. Instalação do Docker
 
@@ -212,28 +212,28 @@ Docker é uma plataforma que permite criar, testar e implantar aplicações rapi
    sudo docker run hello-world
    ```
 
-#### ii. Configurando o MySQL via Contêiner Docker
+#### ii. Configurando o PostgreSQL via Contêiner Docker
 
-Depois de instalar o Docker, você pode criar e rodar um contêiner com o MySQL usando um único comando no seu terminal (Prompt de Comando, PowerShell ou Terminal).
+Depois de instalar o Docker, você pode criar e rodar um contêiner com o PostgreSQL usando um único comando no seu terminal (Prompt de Comando, PowerShell ou Terminal).
 
 1. **Abra seu terminal.**
-2. **Execute o comando abaixo:** Este comando irá baixar a imagem do MySQL (se ainda não existir localmente), criar um contêiner e iniciá-lo.
+2. **Execute o comando abaixo:** Este comando irá baixar a imagem do PostgreSQL (se ainda não existir localmente), criar um contêiner e iniciá-lo.
    **Bash**
 
-   ```
-   docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=sua-senha-aqui -p 3306:3306 -d mysql:latest
-   ```
+```
+docker run --name postgres-container -e POSTGRES_PASSWORD=sua-senha-aqui -p 5432:5432 -d postgres:latest
+```
 
-   **Importante:** Substitua `sua-senha-aqui` por uma senha forte e segura.
+**Importante:** Substitua `sua-senha-aqui` por uma senha forte e segura.
 
 3. **Entendendo o comando:**
 
    - `docker run`: Comando para criar e iniciar um novo contêiner.
-   - `--name mysql-container`: Define um nome para o seu contêiner, facilitando o gerenciamento.
-   - `-e MYSQL_ROOT_PASSWORD=sua-senha-aqui`: Cria uma variável de ambiente dentro do contêiner para definir a senha do usuário `root` do MySQL. **Esta é a parte mais importante para a configuração inicial.**
-   - `-p 3306:3306`: Mapeia a porta `3306` do seu computador (host) para a porta `3306` do contêiner. Isso permite que aplicações na sua máquina (como o DBeaver) se conectem ao MySQL que está rodando dentro do contêiner.
+   - `--name postgres-container`: Define um nome para o seu contêiner, facilitando o gerenciamento.
+   - `-e POSTGRES_PASSWORD=sua-senha-aqui`: Cria uma variável de ambiente dentro do contêiner para definir a senha do usuário `postgres` do PostgreSQL. **Esta é a parte mais importante para a configuração inicial.**
+   - `-p 5432:5432`: Mapeia a porta `5432` do seu computador (host) para a porta `5432` do contêiner. Isso permite que aplicações na sua máquina (como o DBeaver) se conectem ao PostgreSQL que está rodando dentro do contêiner.
    - `-d`: Executa o contêiner em modo "detached" (em segundo plano), liberando seu terminal.
-   - `mysql:latest`: Especifica a imagem que o Docker deve usar. Neste caso, a versão mais recente da imagem oficial do MySQL.
+   - `postgres:latest`: Especifica a imagem que o Docker deve usar. Neste caso, a versão mais recente da imagem oficial do PostgreSQL.
 
 4. **Verifique se o contêiner está em execução:**
    **Bash**
@@ -264,45 +264,58 @@ Se você preferir não usar o Docker, pode instalar o MySQL diretamente no seu s
 2. **Instale o MySQL:**
    **Bash**
 
-   ```
-   brew install mysql
+   ```bash
+   brew install postgresql
    ```
 
-3. **Inicie o serviço do MySQL:**
+3. **Inicie o serviço do PostgreSQL:**
    **Bash**
 
-   ```
-   brew services start mysql
-   ```
+```bash
+brew services start postgresql
+```
 
 4. **Configure a segurança:**
    **Bash**
 
    ```
-   mysql_secure_installation
+   # PostgreSQL não tem um comando equivalente direto a mysql_secure_installation.
+   # A segurança é configurada durante a instalação e através de arquivos de configuração.
+   # Para definir a senha do usuário 'postgres' (se não o fez durante a instalação):
+   # psql -U postgres
+   # ALTER USER postgres WITH PASSWORD 'sua-nova-senha';
    ```
 
-   Siga as instruções na tela para definir a senha do usuário `root` e configurar outras opções de segurança.
+   Siga as instruções na tela para definir a senha do usuário `postgres` e configurar outras opções de segurança.
 
 #### **Linux (Ubuntu/Debian)**
 
 1. **Abra o Terminal.**
-2. **Instale o servidor MySQL:**
+2. **Instale o servidor PostgreSQL:**
    **Bash**
 
-   ```
-   sudo apt update
-   sudo apt install mysql-server
-   ```
+```bash
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+```
 
-3. **Configure a segurança:**
-   **Bash**
+3.  **Configure a segurança (opcional, se não configurado durante a instalação):**
+    **Bash**
 
-   ```
-   sudo mysql_secure_installation
-   ```
+```bash
+# Mude para o usuário postgres
+sudo -i -u postgres
+# Acesse o prompt do PostgreSQL
+psql
+# Defina a senha para o usuário 'postgres'
+ALTER USER postgres WITH PASSWORD 'sua-nova-senha';
+# Saia do psql
+\q
+# Saia do usuário postgres
+exit
+```
 
-   Este comando permitirá que você configure a senha do `root` e outras configurações de segurança.
+Este comando permitirá que você configure a senha do `postgres` e outras configurações de segurança.
 
 ---
 
@@ -312,16 +325,16 @@ Com todas as ferramentas instaladas, o próximo passo é configurar o projeto pa
 
 ---
 
-### a) Criação do banco de dados no MySQL
+### a) Criação do banco de dados no PostgreSQL
 
 Para que a aplicação funcione, é necessário criar o banco de dados que ela utilizará. O nome do banco de dados deve ser `tcc_db`. Abaixo estão duas maneiras de fazer isso:
 
 #### **Método 1: Usando um Gerenciador de Banco de Dados (DBeaver)**
 
-1.  **Abra o DBeaver** e conecte-se à sua instância do MySQL.
+1.  **Abra o DBeaver** e conecte-se à sua instância do PostgreSQL.
     - **Host**: `localhost`
-    - **Porta**: `3306`
-    - **Usuário**: `root`
+    - **Porta**: `5432`
+    - **Usuário**: `postgres`
     - **Senha**: A senha que você definiu durante a instalação do MySQL ou no comando do Docker.
 2.  No menu de navegação à esquerda, clique com o botão direito sobre a sua conexão e selecione **"Criar Novo Banco de Dados"**.
 3.  No campo **"Nome do Banco de Dados"**, digite `tcc_db`.
@@ -331,9 +344,9 @@ Para que a aplicação funcione, é necessário criar o banco de dados que ela u
 #### **Método 2: Usando o Terminal (Linha de Comando)**
 
 1.  **Abra um novo terminal** (Prompt de Comando, PowerShell ou Terminal).
-2.  **Conecte-se ao MySQL** como usuário `root`. Será solicitada a sua senha.
+2.  **Conecte-se ao PostgreSQL** como usuário `postgres`. Será solicitada a sua senha.
     ```bash
-    mysql -u root -p
+    psql -U postgres
     ```
 3.  Após se conectar, você verá o prompt `mysql>`. **Execute o comando SQL** abaixo para criar o banco de dados:
     ```sql
@@ -376,10 +389,10 @@ As variáveis de ambiente são usadas para guardar informações sensíveis ou c
 # Porta em que a aplicação backend irá rodar
 PORT=3001
 
-# Configurações do Banco de Dados
+# Configurações do Banco de Dados (PostgreSQL)
 DATABASE_HOST=localhost
-DATABASE_PORT=3306
-DATABASE_USER=root
+DATABASE_PORT=5432
+DATABASE_USER=postgres
 DATABASE_PASSWORD=sua_senha_do_banco_de_dados # <-- SUBSTITUA PELA SUA SENHA
 DATABASE_NAME=tcc_db
 

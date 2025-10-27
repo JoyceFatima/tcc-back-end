@@ -7,13 +7,13 @@ export class Dashboard {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'json' })
+  @Column({ type: 'jsonb' })
   stats: DashboardDto['stats'];
 
-  @Column({ type: 'json' })
+  @Column({ type: 'jsonb' })
   locationAnalysis: DashboardDto['locationAnalysis'];
 
-  @Column({ type: 'json' })
+  @Column({ type: 'jsonb' })
   insights: DashboardDto['insights'];
 
   @OneToOne(() => Business)
