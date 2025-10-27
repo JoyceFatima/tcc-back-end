@@ -31,6 +31,7 @@ export const databaseConfig: DataSourceOptions = {
   database: database.name,
   entities: ['dist/entities/**/**/*.entity{.ts,.js}'],
   migrations: ['dist/migrations/*.{ts,js}'],
+  ssl: true,
 };
 
 export const seedDatabaseConfig: DataSourceOptions = {
@@ -42,4 +43,5 @@ export const seedDatabaseConfig: DataSourceOptions = {
   database: database.name,
   entities: ['src/entities/**/**/*.entity{.ts,.js}'],
   migrations: ['src/common/database/migrations/*.{ts,js}'],
+  ssl: true,
 };
