@@ -1,6 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
-import { Business } from '../business/business.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+
 import { DashboardDto } from '../../modules/dashboard/dto/dashboard.dto';
+import { Business } from '../business/business.entity';
 
 @Entity('dashboards')
 export class Dashboard {
@@ -16,7 +23,10 @@ export class Dashboard {
   @Column({ type: 'jsonb' })
   insights: DashboardDto['insights'];
 
-  @OneToOne(() => Business)
+  @ManyToOne(() => Business)
   @JoinColumn()
   business: Business;
+
+  @Column({ type: 'boolean', default: false })
+  finished: boolean;
 }
